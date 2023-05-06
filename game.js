@@ -179,9 +179,145 @@ class Fork extends AdventureScene {
 }
 class Garage2 extends AdventureScene {
     constructor() {
-        super('garage2', "Put some new wheels on this baddie")
+        super('garage2', "Pick up your car parts and go home")
     }
-    
+    preload(){
+        this.load.image('garage2',"assets/r32ingarage.png")
+        this.load.image('turbo',"assets/turbo.png")
+        this.load.image('wheels',"assets/wheels.png")
+        this.load.image('paint',"assets/paintbucket.png")
+    }
+    onEnter(){
+        let background = this.add.image(-135,0, "garage2")
+            .setScale(0.75)
+            .setOrigin(0,0);
+        let turbos = this.add.sprite(800, 120, "turbo")
+            .setScale(0.1)
+            .setInteractive({useHandCursor:true})
+            .setAlpha(0.8)
+            .on('pointerover', () => {
+                this.showMessage("Perfect for adding power to the car.")
+
+            })
+            .on('pointerdown', () => {
+                this.showMessage("*you picked up a turbocharger");
+                this.gainItem('turbos');
+                this.tweens.add({
+                    targets: turbos,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => turbos.destroy()
+                });
+            })
+        let wheel1 = this.add.sprite(930, 900, "wheels")
+            .setScale(0.2)
+            .setInteractive({useHandCursor:true})
+            .setAlpha(0.9)
+            .setRotation(4.5)
+            .on('pointerover', () => {
+                this.showMessage("Perfect for changing the wheels on a car.")
+
+            })
+            .on('pointerdown', () => {
+                this.showMessage("*you picked up a wheel");
+                this.gainItem('wheel1');
+                this.tweens.add({
+                    targets: wheel1,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => wheel1.destroy()
+                });
+            })
+        let wheel2 = this.add.sprite(650, 900, "wheels")
+            .setScale(0.2)
+            .setInteractive({useHandCursor:true})
+            .setAlpha(0.9)
+            .setRotation(4.5)
+            .on('pointerover', () => {
+                this.showMessage("Perfect for changing the wheels on a car.")
+
+            })
+            .on('pointerdown', () => {
+                this.showMessage("*you picked up a wheel");
+                this.gainItem('wheel2');
+                this.tweens.add({
+                    targets: wheel2,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => wheel2.destroy()
+                });
+            })
+        let wheel3 = this.add.sprite(740, 900, "wheels")
+            .setScale(0.2)
+            .setInteractive({useHandCursor:true})
+            .setAlpha(0.9)
+            .setRotation(4.5)
+            .on('pointerover', () => {
+                this.showMessage("Perfect for changing the wheels on a car.")
+
+            })
+            .on('pointerdown', () => {
+                this.showMessage("*you picked up a wheel");
+                this.gainItem('wheel3');
+                this.tweens.add({
+                    targets: wheel3,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => wheel3.destroy()
+                });
+            })
+        let wheel4 = this.add.sprite(800, 900, "wheels")
+            .setScale(0.2)
+            .setInteractive({useHandCursor:true})
+            .setAlpha(0.9)
+            .setRotation(4.5)
+            .on('pointerover', () => {
+                this.showMessage("Perfect for changing the wheels on a car.")
+
+            })
+            .on('pointerdown', () => {
+                this.showMessage("*you picked up a wheel");
+                this.gainItem('wheel4');
+                this.tweens.add({
+                    targets: wheel4,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => wheel4.destroy()
+                });
+            })
+        let paint = this.add.sprite(1300, 300, "paint")
+            .setScale(0.1)
+            .setInteractive({useHandCursor:true})
+            .setAlpha(0.8)
+            .on('pointerover', () => {
+                this.showMessage("Perfect for changing the paint on a car.")
+
+            })
+            .on('pointerdown', () => {
+                this.showMessage("*you picked up paint");
+                this.gainItem('paint');
+                this.tweens.add({
+                    targets: paint,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => paint.destroy()
+                });
+            })
+    }
+    update(){
+        if(this.hasItem("turbos") & this.hasItem("wheel1") & this.hasItem("wheel2") & this.hasItem("wheel3") & this.hasItem("wheel4") & this.hasItem("paint")) {
+            this.showMessage("You have it all. Go home")
+            this.cameras.main.fade(1000, 0,0,0);
+            this.time.delayedCall(1000, () => this.scene.start('outro'));
+        }
+    }
+
 }
 class Intro extends Phaser.Scene {
     constructor() {
@@ -208,8 +344,8 @@ class Outro extends Phaser.Scene {
         super('outro');
     }
     create() {
-        this.add.text(50, 50, "Goodbye DK, good work today").setFontSize(50);
-        this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
+        this.add.text(50, 50, "Goodbye DK, good work today\nNext time we can have more fun").setFontSize(50);
+        this.add.text(200, 600, "Click anywhere to restart.").setFontSize(100);
         this.input.on('pointerdown', () => this.scene.start('intro'));
     }
 }
@@ -225,12 +361,12 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Fork, Intro, Garage, Cabin, Garage2, Outro],
+    scene: [Intro, Garage2, Garage, Cabin, Fork, Outro],
     title: "Adventure Game",
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true
+            debug: false
         }
     }
 });
